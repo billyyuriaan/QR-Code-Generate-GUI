@@ -1,0 +1,15 @@
+/__pycache__
+__pycache__
+
+build
+/build
+
+dist
+/dist
+
+main.spec
+.main.spec
+/main.spec
+
+src/__pycache__
+/src/__pycache__
