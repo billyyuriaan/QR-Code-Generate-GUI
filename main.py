@@ -1,15 +1,8 @@
-from ctypes import resize
-import PySimpleGUI as sg
-from src.layouts import qrLayouts,mainProgram
+from src.layouts import Window
 
 def main():
-    sg.theme("DarkAmber")
-
-    layout = [
-        qrLayouts()
-    ]
-
-    mainProgram("QR Generate", layout)
+    window = Window("QR Code Generate", "DarkAmber", True)
+    window.start()
 
 
 if __name__ == "__main__":

@@ -1,40 +1,55 @@
-import imp
 import PySimpleGUI as sg
 import os
-from .qr import createQR
+from src.qr import QRCode
 
+class Window(QRCode):
+    title : str
+    theme : str
+    resizeable : bool
 
-def qrLayouts():
-    layouts = [
-        [sg.Push(), sg.Text("QR GENERATE"), sg.Push()],
-        [sg.Text("Enter the URL or Message", size=(25,1)),sg.InputText(key="-INP-", do_not_clear=False)],
-        [sg.Text("Enter the file name", size=(25,1)),sg.InputText(key="-FILE-", do_not_clear=False)],
-        [sg.Text("Output Path", size=(25,1)),sg.InputText(key="-PATH-", do_not_clear=False), sg.FolderBrowse()],
-        [sg.Text("Picture type", size=(25,1)),sg.Combo(["png","jpeg","jpg"], key="-TYPE-")],
-        [sg.Button("Ok"), sg.Button("cancle")],
-    ]
+    def __init__(self, title : str, theme : str, resizeable : bool):
+        super().__init__()
+        self.title = title
+        self.theme = theme
+        self.resizeable = resizeable
 
-    return layouts
+    def qrLayouts(self):
+        layouts = [
+            [sg.Push(), sg.Text("QR GENERATE"), sg.Push()],
+            [sg.Text("Enter the URL or Message", size=(25,1)),sg.InputText(key="-INP-", do_not_clear=False)],
+            [sg.Text("Enter the file name", size=(25,1)),sg.InputText(key="-FILE-", do_not_clear=False)],
+            [sg.Text("Output Path", size=(25,1)),sg.InputText(key="-PATH-", do_not_clear=False), sg.FolderBrowse()],
+            [sg.Text("Picture type", size=(25,1)),sg.Combo(["png","jpeg","jpg"], key="-TYPE-")],
+            [sg.Button("Ok"), sg.Button("cancle")],
+        ]
 
-def mainProgram(title : str, layouts : list):
-    windows = sg.Window(title, layouts, resizable=True)
+        return layouts
 
-    while True:
-        event, values = windows.read()
+    def start(self):
+        sg.theme(self.theme)
 
-        if event in (sg.WINDOW_CLOSED, "cancle"):
-            break
+        layouts = [
+            self.qrLayouts()
+        ]
 
-        if event == "Ok":
-            try:
-                s = values["-INP-"]
-                fileName = values["-FILE-"]
-                path = values["-PATH-"]
-                type = values["-TYPE-"]
+        windows = sg.Window(self.title, layouts, resizable=self.resizeable)
 
-                createQR(s,fileName,path, type)
-                os.system(f"explorer {path}")
-                sg.Popup("Success")
+        while True:
+            event, values = windows.read()
 
-            except Exception as e:
-                sg.Popup(f"{e}")
+            if event in (sg.WINDOW_CLOSED, "cancle"):
+                break
+
+            if event == "Ok":
+                try:
+                    s = values["-INP-"]
+                    fileName = values["-FILE-"]
+                    path = values["-PATH-"]
+                    type = values["-TYPE-"]
+
+                    self.createQR(s,fileName,path, type)
+                    os.system(f"explorer {path}")
+                    sg.Popup("Success")
+
+                except Exception as e:
+                    sg.Popup(f"{e}")
