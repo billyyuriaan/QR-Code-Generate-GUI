@@ -50,6 +50,8 @@ class Window(QRCode):
                     self.createQR(s,fileName,path, type)
                     os.system(f"explorer {path}")
                     sg.Popup("Success")
-
+                    
                 except Exception as e:
                     sg.Popup(f"{e}")
+                    
+            windows.close()
